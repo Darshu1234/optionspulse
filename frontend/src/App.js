@@ -117,7 +117,7 @@ function App() {
   return (
     <div>
       <header className="header">
-        <h1 className="logo">Options<span className="logo-accent">Pulse</span></h1>
+        <h1 className="logo">Greek<span className="logo-accent">Desk</span></h1>
       </header>
 
       <div className="main-layout">

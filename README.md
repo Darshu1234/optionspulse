@@ -1,4 +1,4 @@
-# OptionsPulse
+# GreekDesk
 
 A full-stack options pricing platform built from scratch. The core pricing engine is written in C++ and exposed to a Python/FastAPI backend via pybind11. A React dashboard renders prices, Greeks, P&L heatmaps, and live volatility smiles.
 
