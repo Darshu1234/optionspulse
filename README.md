@@ -59,7 +59,7 @@ A full-stack options pricing platform built from scratch. The core pricing engin
 ## Project Structure
 
 ```
-optionspulse/
+greekdesk/
 ├── engine/
 │   ├── include/pricer.h       # C++ declarations
 │   └── src/pricer.cpp         # Black-Scholes, Greeks, Newton-Raphson
@@ -94,7 +94,7 @@ optionspulse/
 ```bash
 cmake -S . -B build -G "MinGW Makefiles"
 cmake --build build
-copy build\optionspulse.cp314-win_amd64.pyd backend\
+copy build\greekdesk.cp314-win_amd64.pyd backend\
 ```
 
 ### 2. Configure the database
@@ -108,7 +108,7 @@ DB_PASSWORD=your_postgres_password
 Create the database in PostgreSQL:
 
 ```sql
-CREATE DATABASE optionspulse;
+CREATE DATABASE greekdesk;
 ```
 
 Then create the tables:
@@ -153,5 +153,5 @@ The dashboard opens at `http://localhost:3000`.
 ## Notes
 
 - American options raise a `NotImplementedError` — binomial tree implementation is planned (Phase 5)
-- Volatility smile filters out illiquid contracts (`lastPrice == 0`) and Newton-Raphson divergences (`IV < 0` or `IV > 5`)
+- Volatility smile uses bid/ask midpoint for live pricing; filters strikes to ±30% of spot, removes contracts priced below intrinsic value, and drops IV readings outside [1%, 200%]
 - The `.pyd` binary is platform-specific; recompilation is required on Linux/Mac

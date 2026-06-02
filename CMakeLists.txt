@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(OptionsPulse)
+project(GreekDesk)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -11,11 +11,11 @@ set(pybind11_DIR "C:/Users/darsh/AppData/Roaming/Python/Python314/site-packages/
 set(PYTHON_EXECUTABLE "C:/Python314/python.exe")
 find_package(pybind11 REQUIRED)
 
-pybind11_add_module(optionspulse MODULE
+pybind11_add_module(greekdesk MODULE
     backend/bindings.cpp    
     engine/src/pricer.cpp
     
 )
 
-target_include_directories(optionspulse PRIVATE engine/include)
+target_include_directories(greekdesk PRIVATE engine/include)
 target_include_directories(pricer PRIVATE engine/include)

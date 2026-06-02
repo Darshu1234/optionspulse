@@ -110,11 +110,14 @@ double NewtonRaphson(double S,double K, double r, double T, double price, Option
     }    
     double sigma = 0.2;
     double p = 0;
+    int iter = 0;
     while (!(abs(p-price) < 0.0001)){
+        if (iter++ >= 1000) break;
         p = blackScholesPricer(S,K,r,sigma,T,optionType,optionStyle);
         double v = vega(S,K,r,sigma,T,optionStyle);
         if (v<1e-10) break;
         sigma = sigma - (p-price) / v;
+        sigma = std::max(sigma,1e-6);
     }
     return sigma;
 }

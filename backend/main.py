@@ -1,8 +1,8 @@
 import os;
 os.add_dll_directory("C:/msys64/ucrt64/bin")
-import optionspulse # type: ignore
+import greekdesk # type: ignore
 from pydantic import BaseModel
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from enum import Enum
 import yfinance as yf
 import numpy as np
@@ -119,16 +119,16 @@ def price(request: PriceRequest):
     db = SessionLocal()
     try:
         if request.optionType == OptionType.Call:
-            cpp_type = optionspulse.OptionType.Call
+            cpp_type = greekdesk.OptionType.Call
         else:
-            cpp_type = optionspulse.OptionType.Put
+            cpp_type = greekdesk.OptionType.Put
         
         if request.optionStyle == OptionStyle.European:
-            cpp_style = optionspulse.OptionStyle.European
+            cpp_style = greekdesk.OptionStyle.European
         else:
-            cpp_style = optionspulse.OptionStyle.American
+            cpp_style = greekdesk.OptionStyle.American
 
-        result = optionspulse.price(request.S,request.K,
+        result = greekdesk.price(request.S,request.K,
                                     request.r,request.sigma,request.T,
                                     cpp_type,
                                     cpp_style)
@@ -147,22 +147,22 @@ def greeks(request: PriceRequest):
     db = SessionLocal()
     try:
         if request.optionType == OptionType.Call:
-            cpp_type = optionspulse.OptionType.Call
+            cpp_type = greekdesk.OptionType.Call
         else:
-            cpp_type = optionspulse.OptionType.Put
+            cpp_type = greekdesk.OptionType.Put
         
         if request.optionStyle == OptionStyle.European:
-            cpp_style = optionspulse.OptionStyle.European
+            cpp_style = greekdesk.OptionStyle.European
         else:
-            cpp_style = optionspulse.OptionStyle.American
+            cpp_style = greekdesk.OptionStyle.American
 
-        delta_res = optionspulse.delta(request.S,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style)
-        gamma_res = optionspulse.gamma(request.S,request.K,request.r,request.sigma,request.T,cpp_style)
-        vega_res = optionspulse.vega(request.S,request.K,request.r,request.sigma,request.T,cpp_style)
-        theta_res = optionspulse.theta(request.S,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style)
-        rho_res = optionspulse.rho(request.S,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style)
+        delta_res = greekdesk.delta(request.S,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style)
+        gamma_res = greekdesk.gamma(request.S,request.K,request.r,request.sigma,request.T,cpp_style)
+        vega_res = greekdesk.vega(request.S,request.K,request.r,request.sigma,request.T,cpp_style)
+        theta_res = greekdesk.theta(request.S,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style)
+        rho_res = greekdesk.rho(request.S,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style)
         
-        price_res = optionspulse.price(request.S,request.K,
+        price_res = greekdesk.price(request.S,request.K,
                                     request.r,request.sigma,request.T,
                                     cpp_type,
                                     cpp_style)
@@ -192,43 +192,43 @@ def quote(request: QuoteRequest):
 def greekgraph(request: GraphRequest):
 
     if request.optionType == OptionType.Call:
-        cpp_type = optionspulse.OptionType.Call
+        cpp_type = greekdesk.OptionType.Call
     else:
-        cpp_type = optionspulse.OptionType.Put
+        cpp_type = greekdesk.OptionType.Put
     
     if request.optionStyle == OptionStyle.European:
-        cpp_style = optionspulse.OptionStyle.European
+        cpp_style = greekdesk.OptionStyle.European
     else:
-        cpp_style = optionspulse.OptionStyle.American
+        cpp_style = greekdesk.OptionStyle.American
     s_values = np.linspace(request.S-(request.S//4),request.S+(request.S//4),100)
     result = []
     for i in s_values:
-        delta_res = optionspulse.delta(i,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style)
-        gamma_res = optionspulse.gamma(i,request.K,request.r,request.sigma,request.T,cpp_style)
-        vega_res = optionspulse.vega(i,request.K,request.r,request.sigma,request.T,cpp_style)
-        theta_res = optionspulse.theta(i,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style)
-        rho_res = optionspulse.rho(i,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style) 
+        delta_res = greekdesk.delta(i,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style)
+        gamma_res = greekdesk.gamma(i,request.K,request.r,request.sigma,request.T,cpp_style)
+        vega_res = greekdesk.vega(i,request.K,request.r,request.sigma,request.T,cpp_style)
+        theta_res = greekdesk.theta(i,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style)
+        rho_res = greekdesk.rho(i,request.K,request.r,request.sigma,request.T,cpp_type,cpp_style) 
         result.append(GraphResponse(S=i,delta=delta_res,gamma=gamma_res,vega=vega_res,theta=theta_res,rho=rho_res))
     return result
 
 @app.post("/pnl")
 def pnl(request: pnlRequest):
     if request.optionType == OptionType.Call:
-        cpp_type = optionspulse.OptionType.Call
+        cpp_type = greekdesk.OptionType.Call
     else:
-        cpp_type = optionspulse.OptionType.Put
+        cpp_type = greekdesk.OptionType.Put
     
     if request.optionStyle == OptionStyle.European:
-        cpp_style = optionspulse.OptionStyle.European
+        cpp_style = greekdesk.OptionStyle.European
     else:
-        cpp_style = optionspulse.OptionStyle.American
+        cpp_style = greekdesk.OptionStyle.American
     s_values = np.linspace(request.S-(request.S//4),request.S+(request.S//4),100)
     sigma_values = np.linspace(request.sigma*1.5,request.sigma*0.5,20)
     result = []
     for i in sigma_values:
         row = []
         for j in s_values:
-            pnl = optionspulse.price(j,request.K,
+            pnl = greekdesk.price(j,request.K,
                                     request.r,i,request.T,
                                     cpp_type,
                                     cpp_style) - request.price
@@ -239,27 +239,30 @@ def pnl(request: pnlRequest):
 @app.post("/implied_vol")
 def implied_vol(request: volRequest):
     if request.optionType == OptionType.Call:
-        cpp_type = optionspulse.OptionType.Call
+        cpp_type = greekdesk.OptionType.Call
     else:
-        cpp_type = optionspulse.OptionType.Put
+        cpp_type = greekdesk.OptionType.Put
     
     if request.optionStyle == OptionStyle.European:
-        cpp_style = optionspulse.OptionStyle.European
+        cpp_style = greekdesk.OptionStyle.European
     else:
-        cpp_style = optionspulse.OptionStyle.American
-    result = optionspulse.volatility(request.S, request.K,request.r,request.T,request.price,cpp_type,cpp_style)
+        cpp_style = greekdesk.OptionStyle.American
+    try:
+        result = greekdesk.volatility(request.S, request.K,request.r,request.T,request.price,cpp_type,cpp_style)
+    except ValueError:
+        raise HTTPException(status_code=422, detail="Implied Volatility could not be computed for given inputs")
     return volResponse(sigma=result)
 
 @app.post("/vol_smile")
 def vol_smile(request: volSmileRequest):
     if request.optionType == OptionType.Call:
-        cpp_type = optionspulse.OptionType.Call
+        cpp_type = greekdesk.OptionType.Call
     else:
-        cpp_type = optionspulse.OptionType.Put
+        cpp_type = greekdesk.OptionType.Put
     if request.optionStyle == OptionStyle.European:
-        cpp_style = optionspulse.OptionStyle.European
+        cpp_style = greekdesk.OptionStyle.European
     else:
-        cpp_style = optionspulse.OptionStyle.American
+        cpp_style = greekdesk.OptionStyle.American
         
     target = date.today() + timedelta(days=int(request.T*365))
     expiries = yf.Ticker(request.ticker).options
@@ -271,12 +274,22 @@ def vol_smile(request: volSmileRequest):
     K_list = []
     for i, row in contracts.iterrows():
         strike = row["strike"]
-        lastPrice = row["lastPrice"]
-        if lastPrice == 0:
+        bid = row["bid"]
+        ask = row["ask"]
+        if bid <= 0 or ask <= 0:
+            continue
+        mid = (bid + ask) / 2
+        if strike < 0.7 * request.S or strike > 1.3 * request.S:
+            continue
+        if request.optionType == OptionType.Call:
+            intrinsic = max(0.0, request.S - strike)
+        else:
+            intrinsic = max(0.0, strike - request.S)
+        if mid < intrinsic:
             continue
         try:
-            vol = optionspulse.volatility(request.S, strike,request.r,T,lastPrice,cpp_type,cpp_style)
-            if vol > 5 or vol < 0:
+            vol = greekdesk.volatility(request.S, strike, request.r, T, mid, cpp_type, cpp_style)
+            if vol > 2.0 or vol < 0.01:
                 continue
             vol_list.append(vol)
             K_list.append(strike)

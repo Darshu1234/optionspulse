@@ -289,6 +289,7 @@ function App() {
                     tickLine={false}
                     axisLine={false}
                     width={48}
+                    domain={['auto', 'auto']}
                     label={{ value: 'IV', angle: -90, position: 'insideLeft', fill: '#94A3B8', fontSize: 11 }}
                   />
                   <Tooltip

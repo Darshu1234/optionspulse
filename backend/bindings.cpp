@@ -3,7 +3,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(optionspulse,m){
+PYBIND11_MODULE(greekdesk,m){
     // python has no concept of enum, so we do this to
     // permit python writers to use optionspulse.OptionType.Call 
     // instead of a raw number
