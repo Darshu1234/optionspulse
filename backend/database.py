@@ -13,7 +13,7 @@ Base = declarative_base()
 load_dotenv()
 password = os.getenv("DB_PASSWORD")
 
-DATABASE_URL = f"postgresql://postgres:{password}@localhost:5432/optionspulse"
+DATABASE_URL = f"postgresql://postgres:{password}@localhost:5432/greekdesk"
 engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
