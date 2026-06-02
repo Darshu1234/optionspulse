@@ -45,3 +45,11 @@ desktop.ini
 # ── Logs ─────────────────────────────────────────────
 *.log
 logs/
+
+# ── Claude Code ───────────────────────────────────────
+.claude/
+InstallationLog.txt
+
+# ── React boilerplate ─────────────────────────────────
+frontend/.gitignore
+frontend/README.md
