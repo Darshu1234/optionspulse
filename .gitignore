@@ -1,0 +1,47 @@
+# ── Secrets ──────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+secrets/
+
+# ── Python ───────────────────────────────────────────
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+
+# ── C++ Build ─────────────────────────────────────────
+build/
+*.o
+*.a
+*.exe
+*.dll
+*.so
+*.dylib
+
+# ── Node / React ─────────────────────────────────────
+frontend/node_modules/
+frontend/build/
+npm-debug.log*
+
+# ── Database ─────────────────────────────────────────
+*.sqlite
+*.db
+
+# ── OS ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ──────────────────────────────────────────────
+.vscode/
+.idea/
+
+# ── Logs ─────────────────────────────────────────────
+*.log
+logs/
