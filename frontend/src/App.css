@@ -284,6 +284,12 @@ select.input-field {
   margin-bottom: 1rem;
 }
 
+.charts-grid .chart-card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  width: calc(50% - 0.4375rem);
+  margin: 0 auto;
+}
+
 .chart-card {
   background: var(--surface2);
   border: 1px solid var(--border);
