@@ -150,6 +150,48 @@ The dashboard opens at `http://localhost:3000`.
 
 ---
 
+## Mathematical Foundation
+
+The pricing engine is grounded in stochastic calculus and the Black-Scholes PDE derivation.
+
+### Brownian Motion
+
+Constructed as the limit of a symmetric random walk. Four defining properties: $W_0 = 0$, independent increments, $W_t - W_s \sim \mathcal{N}(0, t-s)$, continuous paths. Nowhere differentiable — fractal and self-similar. The key differential: $dW_t \sim \mathcal{N}(0, dt)$.
+
+### Geometric Brownian Motion
+
+$$dS = \mu S \, dt + \sigma S \, dW_t$$
+
+Models log-returns (not absolute price changes), ensuring $S > 0$ always. The lognormality of $S$ follows directly.
+
+### Itô's Lemma
+
+For a function $V(S, t)$, Taylor expansion to second order with the Itô rule $(dW_t)^2 = dt$:
+
+$$dV = \frac{\partial V}{\partial t}dt + \frac{\partial V}{\partial S}dS + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}dt$$
+
+The correction term $\frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}$ is the Itô term — absent in ordinary calculus, essential here.
+
+### Black-Scholes PDE
+
+Derived via delta hedging: construct a portfolio $\Pi = V - \Delta S$ that is instantaneously riskless. By no-arbitrage it must earn the risk-free rate. Applying Itô's Lemma and setting $\Delta = \frac{\partial V}{\partial S}$ eliminates all stochastic terms. $\mu$ drops out entirely:
+
+$$\frac{\partial V}{\partial t} + rS\frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} - rV = 0$$
+
+### Solving the PDE
+
+Transformed to the heat equation via substitutions $x = \ln S$, $\tau = T - t$, $V = e^{\alpha x + \beta \tau} u$. The heat equation has a known Green's function solution, which — after reversing the substitutions — yields the closed form.
+
+### Closed-Form Formula (European Call)
+
+$$V = S \, \mathcal{N}(d_1) - K e^{-r(T-t)} \mathcal{N}(d_2)$$
+
+$$d_1 = \frac{\ln(S/K) + (r + \frac{1}{2}\sigma^2)(T-t)}{\sigma\sqrt{T-t}}, \qquad d_2 = d_1 - \sigma\sqrt{T-t}$$
+
+$\mathcal{N}(d_2)$ is the risk-neutral probability of expiring in the money. $\mathcal{N}(d_1)$ is $\mathcal{N}(d_2)$ shifted by $\sigma\sqrt{T-t}$, accounting for receiving the stock rather than cash. $\mathcal{N}(d_1) = \Delta$.
+
+---
+
 ## Notes
 
 - American options raise a `NotImplementedError` — binomial tree implementation is planned (Phase 5)
