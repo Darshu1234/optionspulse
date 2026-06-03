@@ -4,7 +4,7 @@ A full-stack options pricing platform built from scratch. The core pricing engin
 
 ![Dashboard - Greeks & Charts](screenshot1.png)
 ![Dashboard - P&L Heatmap & Volatility Smile](screenshot2.png)
-note: name changed from OptionsPulse to GreekDesk
+
 ---
 
 ## Architecture
