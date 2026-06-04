@@ -180,7 +180,7 @@ $$\frac{\partial V}{\partial t} + rS\frac{\partial V}{\partial S} + \frac{1}{2}\
 
 ### Solving the PDE
 
-Transformed to the heat equation via substitutions $x = \ln S$, $\tau = T - t$, $V = e^{\alpha x + \beta \tau} u$. The heat equation has a known Green's function solution, which — after reversing the substitutions — yields the closed form.
+Transformed to the heat equation via substitutions $x = \ln S$, $\tau = T - t$, $V = e^{\alpha x + \beta \tau} u$. The heat equation has a known Green's function solution, which after reversing the substitutions yields the closed form.
 
 ### Closed-Form Formula (European Call)
 
