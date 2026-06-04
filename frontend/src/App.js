@@ -110,9 +110,15 @@ function App() {
     }
   }
 
-  const smileData = volSmile
-    ? volSmile.K_list.map((k, i) => ({ K: k, vol: volSmile.vol_list[i] }))
-    : [];
+  const smileData = volSmile && volSmile.K_list
+      ? volSmile.K_list.map((k, i) => ({ K: k, vol: volSmile.vol_list[i] }))
+      : [];
+  const atmIV = volSmile && volSmile.K_list && volSmile.K_list.length > 0
+      ? volSmile.vol_list[volSmile.K_list.reduce((best, k, i) =>
+          Math.abs(k - S) < Math.abs(volSmile.K_list[best] - S) ? i : best, 0)]
+      : null;
+
+
 
   return (
     <div>
@@ -242,6 +248,24 @@ function App() {
                     </ResponsiveContainer>
                   </div>
                 ))}
+                <div className="chart-card">
+                  <div className="chart-title" style={{ color: '#94A3B8' }}>Vol Comparison</div>
+                  <div className="greek-item">
+                    <div className="greek-name">At The Money IV</div>
+                    <div className="greek-value" style={{ color: '#22C55E' }}>{atmIV !== null ? Number(atmIV).toFixed(4) : '—'}</div>
+                  </div>
+                  <div className="greek-item">
+                    <div className="greek-name">Hist Vol</div>
+                    <div className="greek-value" style={{ color: '#3B82F6' }}>{sigma ? Number(sigma).toFixed(4) : '—'}</div>
+                  </div>
+                  <div className="greek-item">
+                    <div className="greek-name">Premium</div>
+                    <div className="greek-value" style={{ color: atmIV !== null && atmIV - sigma > 0 ? '#EF4444' : '#22C55E' }}>
+                      {atmIV !== null ? (atmIV - sigma > 0 ? '+' : '') + Number(atmIV - sigma).toFixed(4) : '—'}
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </>
           )}
